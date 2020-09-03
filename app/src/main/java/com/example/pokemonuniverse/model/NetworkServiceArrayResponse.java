@@ -7,31 +7,19 @@ import java.util.List;
 
 public class NetworkServiceArrayResponse {
 
-    @SerializedName("count")
-    @Expose
-    Integer count;
     @SerializedName("results")
     @Expose
-    List<Pokemon> data;
+    List<Pokemon> results;
 
-    public Integer getCount() {
-        return count;
+    public List<Pokemon> getResults() {
+        return results;
     }
 
-    public List<Pokemon> getData() {
-        return data;
+    public void setResults(List<Pokemon> results) {
+        this.results = results;
     }
 
-    public NetworkServiceArrayResponse(Integer count, List<Pokemon> data) {
-        this.count = count;
-        this.data = data;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public void setData(List<Pokemon> data) {
-        this.data = data;
+    public NetworkServiceArrayResponse(List<Pokemon> data) {
+        this.results = data;
     }
 }

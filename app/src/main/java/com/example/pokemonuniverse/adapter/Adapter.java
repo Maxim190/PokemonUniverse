@@ -1,5 +1,6 @@
 package com.example.pokemonuniverse.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokemonuniverse.R;
+import com.example.pokemonuniverse.Utils;
 import com.example.pokemonuniverse.model.PokemonStorage;
 
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver;
@@ -29,13 +31,14 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.bind(storage.getPokemonById(position));
+        //adapter informs presenter to load more data
         if (position == storage.getStorageSize() - 1) {
             runOutOfDataObserver.onComplete();
         }
     }
 
-    public void dataChanged() {
-        notifyDataSetChanged();
+    public void refreshItem(int id) {
+        notifyItemChanged(id - 1);
     }
 
     @Override

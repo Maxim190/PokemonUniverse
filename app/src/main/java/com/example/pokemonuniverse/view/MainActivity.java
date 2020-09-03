@@ -1,8 +1,12 @@
 package com.example.pokemonuniverse.view;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,9 +25,9 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
         mainPresenter = new MainPresenter(this);
 
@@ -33,4 +37,7 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
         recyclerView.setAdapter(adapter);
     }
 
+    public void runOnUi(Runnable action) {
+        runOnUiThread(action);
+    }
 }

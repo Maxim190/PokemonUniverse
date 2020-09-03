@@ -2,25 +2,16 @@ package com.example.pokemonuniverse.presenter;
 
 import android.util.Log;
 
-import androidx.lifecycle.Observer;
-
+import com.example.pokemonuniverse.Utils;
 import com.example.pokemonuniverse.adapter.Adapter;
 import com.example.pokemonuniverse.model.Pokemon;
 import com.example.pokemonuniverse.model.PokemonStorage;
 import com.example.pokemonuniverse.view.MainViewInterface;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver;
-import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 
 public class MainPresenter implements MainPresenterInterface {
 
@@ -39,7 +30,7 @@ public class MainPresenter implements MainPresenterInterface {
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.e("PokemonError", e.getMessage());
+                Log.e(Utils.LOG_ERROR_TAG, e.getMessage());
             }
         });
         view.setAdapter(mainViewAdapter);
@@ -47,15 +38,25 @@ public class MainPresenter implements MainPresenterInterface {
     }
 
     private void getPortionOfPokemon() {
-        pokemonStorage.getNextListOfPokemons(new DisposableCompletableObserver() {
+        pokemonStorage.loadNextPartOfPokemons(new Observer<Pokemon>() {
             @Override
-            public void onComplete() {
-                mainViewAdapter.dataChanged();
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull Pokemon pokemon) {
+                view.runOnUi(()-> mainViewAdapter.refreshItem(pokemon.getId()));
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.e("PokemonError", e.getMessage());
+                Log.e(Utils.LOG_ERROR_TAG, e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }
