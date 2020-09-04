@@ -1,5 +1,6 @@
-package com.example.pokemonuniverse.model;
+package com.example.pokemonuniverse.model.api;
 
+import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +10,7 @@ public class NetworkServiceArrayResponse {
 
     @SerializedName("results")
     @Expose
-    List<Pokemon> results;
+    private List<Pokemon> results;
 
     public List<Pokemon> getResults() {
         return results;

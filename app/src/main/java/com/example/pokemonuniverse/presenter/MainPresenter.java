@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.pokemonuniverse.Utils;
 import com.example.pokemonuniverse.adapter.Adapter;
-import com.example.pokemonuniverse.model.Pokemon;
+import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.PokemonStorage;
 import com.example.pokemonuniverse.view.MainViewInterface;
 
@@ -38,6 +38,7 @@ public class MainPresenter implements MainPresenterInterface {
     }
 
     private void getPortionOfPokemon() {
+        Log.d(Utils.LOG_DEBUG_TAG, pokemonStorage.getStorageSize() + " size now, get 30");
         pokemonStorage.loadNextPartOfPokemons(new Observer<Pokemon>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {

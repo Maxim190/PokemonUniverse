@@ -1,7 +1,5 @@
 package com.example.pokemonuniverse.adapter;
 
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,8 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokemonuniverse.R;
-import com.example.pokemonuniverse.Utils;
-import com.example.pokemonuniverse.model.Pokemon;
+import com.example.pokemonuniverse.model.pojo.Pokemon;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
 

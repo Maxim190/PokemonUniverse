@@ -6,6 +6,10 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.example.pokemonuniverse.Utils;
+import com.example.pokemonuniverse.model.api.NetworkService;
+import com.example.pokemonuniverse.model.api.NetworkServiceArrayResponse;
+import com.example.pokemonuniverse.model.pojo.Pokemon;
+import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -44,8 +48,8 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
                     @Override
                     public void onResponse(Call<NetworkServiceArrayResponse> call,
                                            Response<NetworkServiceArrayResponse> response) {
-                        List<Pokemon> rawList = response.body().results;
-                        storage.addAll(response.body().results);
+                        List<Pokemon> rawList = response.body().getResults();
+                        storage.addAll(rawList);
 
                         Observable<Pokemon> observable = Observable.create(emitter ->
                                 rawList.forEach(pokemon -> {
@@ -61,6 +65,27 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
                     @Override
                     public void onFailure(Call<NetworkServiceArrayResponse> call, Throwable t) {
                         Log.e(Utils.LOG_ERROR_TAG, t.getMessage());
+                    }
+                });
+    }
+
+    public void getPokemonDetails(Integer id) {
+        NetworkService.getInstance()
+                .getServiceApi()
+                .getPokemonAdditionalInf(id)
+                .enqueue(new Callback<PokemonAdditionalInf>() {
+                    @Override
+                    public void onResponse(Call<PokemonAdditionalInf> call, Response<PokemonAdditionalInf> response) {
+                        PokemonAdditionalInf pokemon = response.body();
+                        Log.d(Utils.LOG_DEBUG_TAG, "HERE");
+                        Log.d(Utils.LOG_DEBUG_TAG, pokemon.getHeight() + " " + pokemon.getWeight());
+                        pokemon.getStats().forEach(pokemonStat -> Log.d(Utils.LOG_DEBUG_TAG, pokemonStat.getName() + ":" + pokemonStat.getValue()));
+                        pokemon.getTypes().forEach(pokemonType -> Log.d(Utils.LOG_DEBUG_TAG, pokemonType.getName()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<PokemonAdditionalInf> call, Throwable t) {
+
                     }
                 });
     }

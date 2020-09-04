@@ -1,4 +1,4 @@
-package com.example.pokemonuniverse.model;
+package com.example.pokemonuniverse.model.pojo;
 
 import android.graphics.Bitmap;
 
@@ -13,12 +13,22 @@ public class Pokemon {
     @SerializedName("url")
     @Expose
     private String url;
+
     private Integer id;
-    private Bitmap image = null;
+    private Bitmap image;
+    private PokemonAdditionalInf additionalInf;
 
     public Pokemon(String name, String url) {
         this.name = name;
         this.url = url;
+    }
+
+    public PokemonAdditionalInf getAdditionalInf() {
+        return additionalInf;
+    }
+
+    public void setAdditionalInf(PokemonAdditionalInf additionalInf) {
+        this.additionalInf = additionalInf;
     }
 
     public Integer getId() {

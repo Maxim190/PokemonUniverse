@@ -1,4 +1,9 @@
-package com.example.pokemonuniverse.model;
+package com.example.pokemonuniverse.model.api;
+
+import com.example.pokemonuniverse.model.pojo.types.PokemonType;
+import com.example.pokemonuniverse.model.pojo.types.TypeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -10,9 +15,12 @@ public class NetworkService {
     private Retrofit retrofit;
 
     private NetworkService() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(PokemonType.class, new TypeDeserializer())
+                .create();
         retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 
