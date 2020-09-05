@@ -55,13 +55,14 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
                         List<Pokemon> rawList = response.body().getResults();
                         storage.addAll(rawList);
 
-                        Observable<Pokemon> observable = Observable.create(emitter ->
-                                rawList.forEach(pokemon -> {
-                                    Bitmap image = loadImageFromUrl(String.format(IMAGE_STORE_URL_TMP, pokemon.getId()));
-                                    pokemon.setImage(image);
-                                    emitter.onNext(pokemon);
-                                })
-                        );
+                        Observable<Pokemon> observable = Observable.create(emitter -> {
+                            rawList.forEach(pokemon -> {
+                                Bitmap image = loadImageFromUrl(String.format(IMAGE_STORE_URL_TMP, pokemon.getId()));
+                                pokemon.setImage(image);
+                                emitter.onNext(pokemon);
+                            });
+                            emitter.onComplete();
+                        });
                         observable.subscribeOn(Schedulers.io())
                                 .subscribeWith(observer);
                     }
@@ -74,6 +75,10 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
     }
 
     public void loadPokemonAdditionalInf(Pokemon pokemon, Observer<Pokemon> observer) {
+        if (pokemon.getAdditionalInf() != null) {
+            Observable.just(pokemon).subscribeWith(observer);
+            return;
+        }
         NetworkService.getInstance()
                 .getServiceApi()
                 .getPokemonAdditionalInf(pokemon.getId())
@@ -81,10 +86,7 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
                     @Override
                     public void onResponse(Call<PokemonAdditionalInf> call, Response<PokemonAdditionalInf> response) {
                         pokemon.setAdditionalInf(response.body());
-                        if (observer != null) {
-                            Log.d("SS", pokemon.getAdditionalInf().getPokemonDefence() + " " + storage.indexOf(pokemon));
-                            Observable.just(pokemon).subscribeWith(observer);
-                        }
+                        Observable.just(pokemon).subscribeWith(observer);
                     }
 
                     @Override

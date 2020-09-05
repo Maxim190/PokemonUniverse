@@ -14,6 +14,7 @@ import com.example.pokemonuniverse.view.MainViewInterface;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
@@ -24,6 +25,8 @@ public class MainPresenter implements MainPresenterInterface {
     PokemonStorage pokemonStorage;
     MainViewInterface view;
     Adapter mainViewAdapter;
+
+    List<StatTypes> filters;
 
     public MainPresenter(MainViewInterface view) {
         this.view = view;
@@ -106,16 +109,19 @@ public class MainPresenter implements MainPresenterInterface {
 
             @Override
             public void onComplete() {
-
+                if (filters != null && !filters.isEmpty()) {
+                    filterPokemonsByStats(filters);
+                }
             }
         });
     }
 
     public void filterPokemonsByStats(List<StatTypes> filters) {
-        List<Pokemon> pokemons = pokemonStorage.getPokemonList();
+        this.filters = filters;
         new Thread(()-> {
-            final int[] counter = {0};
-            pokemons.forEach(pokemon -> pokemonStorage.loadPokemonAdditionalInf(pokemon, new Observer<Pokemon>() {
+            AtomicInteger counter = new AtomicInteger(0);
+            pokemonStorage.getPokemonList().forEach(pokemon ->
+                    pokemonStorage.loadPokemonAdditionalInf(pokemon, new Observer<Pokemon>() {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
 
@@ -123,8 +129,7 @@ public class MainPresenter implements MainPresenterInterface {
 
                 @Override
                 public void onNext(@NonNull Pokemon pokemon) {
-                    counter[0]++;
-                    if ((pokemonStorage.getStorageSize()) == counter[0]) {
+                    if ((pokemonStorage.getStorageSize()) == counter.incrementAndGet()) {
                         Collections.sort(pokemonStorage.getPokemonList(), new PokemonStatComparator(filters));
                         view.runOnUi(()-> mainViewAdapter.refreshAll());
                     }
@@ -157,7 +162,10 @@ public class MainPresenter implements MainPresenterInterface {
             PokemonAdditionalInf other = o2.getAdditionalInf();
 
             int comparison = 0;
-            if (filters.contains(StatTypes.ATTACK)) {
+            if (filters == null || filters.isEmpty()) {
+                return o1.getId() - o2.getId();
+            }
+            else if (filters.contains(StatTypes.ATTACK)) {
                 comparison = other.getPokemonAttack() - current.getPokemonAttack();
                 if (comparison != 0) {
                     return comparison;
@@ -169,13 +177,7 @@ public class MainPresenter implements MainPresenterInterface {
                     return comparison;
                 }
             }
-            else if (filters.contains(StatTypes.DEFENSE)) {
-                return other.getPokemonDefence() - current.getPokemonDefence();
-            }
-            else {
-                return o1.getId() - o2.getId();
-            }
-            return comparison;
+            return other.getPokemonDefence() - current.getPokemonDefence();
         }
     }
 }
