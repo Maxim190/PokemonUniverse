@@ -8,4 +8,5 @@ public interface MainViewInterface {
     void runOnUi(Runnable action);
     void openPokemonActivity(Pokemon pokemon);
     void scrollListToPosition(int position);
+    void selectItemByPosition(int position, int color);
 }

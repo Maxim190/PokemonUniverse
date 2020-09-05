@@ -1,5 +1,6 @@
 package com.example.pokemonuniverse.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
     private PokemonStorage storage;
     private final Observer<AdapterEvent> eventListener;
     private Integer lastItemClickedPosition;
+    private Boolean selectFirstItem = false;
 
     @NonNull
     @Override
@@ -30,6 +32,9 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        if (selectFirstItem && position == 0) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#7FFFD4"));
+        }
         holder.bind(storage.getPokemonByPosition(position));
         holder.itemView.setOnClickListener(view -> {
             lastItemClickedPosition = position;
@@ -55,6 +60,11 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
 
     public void refreshAll() {
         notifyDataSetChanged();
+    }
+
+    public void selectFirstItem(Boolean value) {
+        selectFirstItem = value;
+        refreshItem(0);
     }
 
     @Override

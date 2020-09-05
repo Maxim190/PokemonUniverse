@@ -134,6 +134,7 @@ public class MainPresenter implements MainPresenterInterface {
                         view.runOnUi(()-> mainViewAdapter.refreshAll());
                         if (scrollToBeginning) {
                             view.scrollListToPosition(0);
+                            view.runOnUi(()-> mainViewAdapter.selectFirstItem(!filters.isEmpty()));
                         }
                     }
                 }
