@@ -54,8 +54,8 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
                 .subscribeWith(observer);
     }
 
-    public void refreshItem(int id) {
-        notifyItemChanged(id - 1);
+    public void refreshItem(int position) {
+        notifyItemChanged(position);
     }
 
     public void refreshAll() {
@@ -70,6 +70,11 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public int getItemCount() {
         return storage.getStorageSize();
+    }
+
+    public void setNewStorage(PokemonStorage storage) {
+        this.storage = storage;
+        refreshAll();
     }
 
     public Adapter(PokemonStorage storage, Observer<AdapterEvent> eventListener) {

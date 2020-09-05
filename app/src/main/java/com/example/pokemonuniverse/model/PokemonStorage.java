@@ -9,6 +9,7 @@ import com.example.pokemonuniverse.model.api.NetworkService;
 import com.example.pokemonuniverse.model.api.NetworkServiceArrayResponse;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
+import com.example.pokemonuniverse.model.pojo.TotalCount;
 import com.example.pokemonuniverse.utils.Consts;
 import com.squareup.picasso.Picasso;
 
@@ -26,14 +27,48 @@ import retrofit2.Response;
 public class PokemonStorage extends LiveData<List<Pokemon>> {
     private static final int PORTION_SIZE = 30;
     public static final String IMAGE_STORE_URL_TMP = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/%d.png";
+    private Integer seed;
+    private TotalCount totalCount;
     private List<Pokemon> storage;
 
     public PokemonStorage() {
+        this(0);
+    }
+
+    public PokemonStorage(Integer seed) {
+        totalCount = new TotalCount(1000);
+        loadTotalDataCount();
         storage = new LinkedList<>();
+        this.seed = seed;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount.getTotalCount();
+    }
+
+    private void loadTotalDataCount() {
+        NetworkService.getInstance()
+                .getServiceApi()
+                .getTotalDataCount()
+                .enqueue(new Callback<TotalCount>() {
+                    @Override
+                    public void onResponse(Call<TotalCount> call, Response<TotalCount> response) {
+                        totalCount = response.body();
+                    }
+
+                    @Override
+                    public void onFailure(Call<TotalCount> call, Throwable t) {
+
+                    }
+                });
     }
 
     public Pokemon getPokemonByPosition(int position) {
         return storage.get(position);
+    }
+
+    public Integer getPokemonPosition(Pokemon pokemon) {
+        return storage.indexOf(pokemon);
     }
 
     public Integer getStorageSize() {
@@ -45,9 +80,21 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
     }
 
     public void loadNextPartOfPokemons(Observer<Pokemon> observer) {
+        if (storage.size() == totalCount.getTotalCount()) {
+            return;
+        }
+        Integer offset = seed + storage.size();
+        if (seed + storage.size() >= totalCount.getTotalCount()) {
+            offset = 0;
+        }
+        Integer portionSize = PORTION_SIZE;
+        if (storage.size() + portionSize >= totalCount.getTotalCount()) {
+            portionSize = totalCount.getTotalCount() - storage.size();
+        }
+
         NetworkService.getInstance()
                 .getServiceApi()
-                .getPokemonsList(PORTION_SIZE, storage.size())
+                .getPokemonsList(portionSize, offset)
                 .enqueue(new Callback<NetworkServiceArrayResponse>() {
                     @Override
                     public void onResponse(Call<NetworkServiceArrayResponse> call,

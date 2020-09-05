@@ -8,9 +8,17 @@ import java.util.List;
 
 public class NetworkServiceArrayResponse {
 
+    @SerializedName("count")
+    @Expose
+    private Integer totalCount;
+
     @SerializedName("results")
     @Expose
     private List<Pokemon> results;
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
 
     public List<Pokemon> getResults() {
         return results;

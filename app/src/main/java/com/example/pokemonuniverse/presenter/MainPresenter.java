@@ -14,6 +14,7 @@ import com.example.pokemonuniverse.view.MainViewInterface;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -22,14 +23,16 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 public class MainPresenter implements MainPresenterInterface {
 
-    PokemonStorage pokemonStorage;
-    MainViewInterface view;
-    Adapter mainViewAdapter;
+    private Random random;
+    private PokemonStorage pokemonStorage;
+    private MainViewInterface view;
+    private Adapter mainViewAdapter;
 
-    List<StatTypes> filters;
+    private List<StatTypes> filters;
 
     public MainPresenter(MainViewInterface view) {
         this.view = view;
+        random = new Random();
         pokemonStorage = new PokemonStorage();
         mainViewAdapter = new Adapter(pokemonStorage, new Observer<AdapterEvent>() {
             @Override
@@ -99,7 +102,8 @@ public class MainPresenter implements MainPresenterInterface {
 
             @Override
             public void onNext(@NonNull Pokemon pokemon) {
-                view.runOnUi(()-> mainViewAdapter.refreshItem(pokemon.getId()));
+                Log.d("DD", "REFRESH " + (pokemonStorage.getPokemonPosition(pokemon)));
+                view.runOnUi(()-> mainViewAdapter.refreshItem(pokemonStorage.getPokemonPosition(pokemon)));
             }
 
             @Override
@@ -150,6 +154,14 @@ public class MainPresenter implements MainPresenterInterface {
                 }
             }));
         }).start();
+    }
+
+    @Override
+    public void initializeListWithNewSeed() {
+        Integer seed = random.nextInt(pokemonStorage.getTotalCount());
+        pokemonStorage = new PokemonStorage(seed);
+        getPortionOfPokemon();
+        view.runOnUi(()-> mainViewAdapter.setNewStorage(pokemonStorage));
     }
 
     private class PokemonStatComparator implements Comparator<Pokemon> {

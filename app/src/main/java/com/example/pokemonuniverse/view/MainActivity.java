@@ -1,8 +1,12 @@
 package com.example.pokemonuniverse.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -81,6 +85,22 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
 
     public void scrollListToPosition(int position) {
         runOnUiThread(()-> recyclerView.smoothScrollToPosition(position));
+    }
+
+    @SuppressLint("ResourceType")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_button) {
+            mainPresenter.initializeListWithNewSeed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void selectItemByPosition(int position, int color) {
