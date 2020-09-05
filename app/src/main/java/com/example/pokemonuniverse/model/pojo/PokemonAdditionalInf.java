@@ -1,14 +1,14 @@
 package com.example.pokemonuniverse.model.pojo;
 
-import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.stats.PokemonStat;
 import com.example.pokemonuniverse.model.pojo.types.PokemonType;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PokemonAdditionalInf extends Pokemon {
+public class PokemonAdditionalInf implements Serializable {
     @SerializedName("height")
     @Expose
     private Integer height;
@@ -21,10 +21,6 @@ public class PokemonAdditionalInf extends Pokemon {
     @SerializedName("stats")
     @Expose
     private List<PokemonStat> stats;
-
-    public PokemonAdditionalInf(String name, String url) {
-        super(name, url);
-    }
 
     public List<PokemonType> getTypes() {
         return types;

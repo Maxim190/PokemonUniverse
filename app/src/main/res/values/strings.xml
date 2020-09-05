@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Pokemon Universe</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="types">Types</string>
+    <string name="stats">Stats</string>
+    <string name="name">Name</string>
 </resources>

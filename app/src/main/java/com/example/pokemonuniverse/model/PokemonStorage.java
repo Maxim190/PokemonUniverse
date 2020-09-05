@@ -5,13 +5,15 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.pokemonuniverse.Utils;
+import com.example.pokemonuniverse.utils.BitmapConverter;
+import com.example.pokemonuniverse.utils.Consts;
 import com.example.pokemonuniverse.model.api.NetworkService;
 import com.example.pokemonuniverse.model.api.NetworkServiceArrayResponse;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,18 +34,22 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
         storage = new LinkedList<>();
     }
 
-    public Pokemon getPokemonById(int id) {
-        return storage.get(id);
+    public Pokemon getPokemonByPosition(int position) {
+        return storage.get(position);
     }
 
     public Integer getStorageSize() {
         return storage.size();
     }
 
+    public List<Pokemon> getPokemonList() {
+        return storage;
+    }
+
     public void loadNextPartOfPokemons(Observer<Pokemon> observer) {
         NetworkService.getInstance()
                 .getServiceApi()
-                .getPokemonList(PORTION_SIZE, storage.size())
+                .getPokemonsList(PORTION_SIZE, storage.size())
                 .enqueue(new Callback<NetworkServiceArrayResponse>() {
                     @Override
                     public void onResponse(Call<NetworkServiceArrayResponse> call,
@@ -64,23 +70,20 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
 
                     @Override
                     public void onFailure(Call<NetworkServiceArrayResponse> call, Throwable t) {
-                        Log.e(Utils.LOG_ERROR_TAG, t.getMessage());
+                        Log.e(Consts.LOG_ERROR_TAG, t.getMessage());
                     }
                 });
     }
 
-    public void getPokemonDetails(Integer id) {
+    public void loadPokemonAdditionalInf(Pokemon pokemon, Observer<Pokemon> observer) {
         NetworkService.getInstance()
                 .getServiceApi()
-                .getPokemonAdditionalInf(id)
+                .getPokemonAdditionalInf(pokemon.getId())
                 .enqueue(new Callback<PokemonAdditionalInf>() {
                     @Override
                     public void onResponse(Call<PokemonAdditionalInf> call, Response<PokemonAdditionalInf> response) {
-                        PokemonAdditionalInf pokemon = response.body();
-                        Log.d(Utils.LOG_DEBUG_TAG, "HERE");
-                        Log.d(Utils.LOG_DEBUG_TAG, pokemon.getHeight() + " " + pokemon.getWeight());
-                        pokemon.getStats().forEach(pokemonStat -> Log.d(Utils.LOG_DEBUG_TAG, pokemonStat.getName() + ":" + pokemonStat.getValue()));
-                        pokemon.getTypes().forEach(pokemonType -> Log.d(Utils.LOG_DEBUG_TAG, pokemonType.getName()));
+                        pokemon.setAdditionalInf(response.body());
+                        Observable.just(pokemon).subscribeWith(observer);
                     }
 
                     @Override
@@ -93,9 +96,9 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
     public Bitmap loadImageFromUrl(String url) {
         Bitmap result = null;
         try {
-            result =  Picasso.get().load(url).get();
+            result = Picasso.get().load(url).get();
         } catch (IOException e) {
-            Log.e(Utils.LOG_ERROR_TAG, e.getMessage());
+            Log.e(Consts.LOG_ERROR_TAG, e.getMessage());
         }
         return result;
     }

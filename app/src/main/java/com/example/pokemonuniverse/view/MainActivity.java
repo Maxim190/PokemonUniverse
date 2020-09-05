@@ -1,8 +1,6 @@
 package com.example.pokemonuniverse.view;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokemonuniverse.R;
+import com.example.pokemonuniverse.utils.Consts;
 import com.example.pokemonuniverse.adapter.Adapter;
+import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.presenter.MainPresenter;
 import com.example.pokemonuniverse.presenter.MainPresenterInterface;
 
@@ -39,5 +39,13 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
 
     public void runOnUi(Runnable action) {
         runOnUiThread(action);
+    }
+
+    @Override
+    public void openPokemonActivity(Pokemon pokemon) {
+        Intent intent = new Intent(this, PokemonActivity.class);
+        intent.putExtra(Consts.INTENT_EXTRA, pokemon);
+
+        startActivity(intent);
     }
 }

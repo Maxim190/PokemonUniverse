@@ -1,11 +1,16 @@
 package com.example.pokemonuniverse.model.pojo;
 
 import android.graphics.Bitmap;
+import android.os.Parcelable;
+import android.util.Log;
 
+import com.example.pokemonuniverse.utils.BitmapConverter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Pokemon {
+import java.io.Serializable;
+
+public class Pokemon implements Serializable {
 
     @SerializedName("name")
     @Expose
@@ -13,14 +18,22 @@ public class Pokemon {
     @SerializedName("url")
     @Expose
     private String url;
-
     private Integer id;
-    private Bitmap image;
+    private Integer adapterPosition;
+    private byte[] image;
     private PokemonAdditionalInf additionalInf;
 
     public Pokemon(String name, String url) {
         this.name = name;
         this.url = url;
+    }
+
+    public Integer getAdapterPosition() {
+        return adapterPosition;
+    }
+
+    public void setAdapterPosition(Integer adapterPosition) {
+        this.adapterPosition = adapterPosition;
     }
 
     public PokemonAdditionalInf getAdditionalInf() {
@@ -52,10 +65,15 @@ public class Pokemon {
     public String getUrl() {return url;}
 
     public Bitmap getImage() {
-        return image;
+        return BitmapConverter.toBitmap(image);
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public void setImage(Bitmap image) {
-        this.image = image;
+        this.image = BitmapConverter.toByteArray(image);
+        Log.d("YES", this.image.length + " ARRAY");
     }
 }
