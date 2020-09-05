@@ -5,4 +5,8 @@
     <string name="types">Types</string>
     <string name="stats">Stats</string>
     <string name="name">Name</string>
+    <string name="defence">defence</string>
+    <string name="hp">hp</string>
+    <string name="filter">Filter</string>
+    <string name="attack">attack</string>
 </resources>

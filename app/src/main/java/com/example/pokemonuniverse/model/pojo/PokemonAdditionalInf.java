@@ -1,6 +1,9 @@
 package com.example.pokemonuniverse.model.pojo;
 
+import android.util.Log;
+
 import com.example.pokemonuniverse.model.pojo.stats.PokemonStat;
+import com.example.pokemonuniverse.model.pojo.stats.StatTypes;
 import com.example.pokemonuniverse.model.pojo.types.PokemonType;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -38,4 +41,24 @@ public class PokemonAdditionalInf implements Serializable {
         return weight;
     }
 
+    private Integer getStatValue(StatTypes type) {
+        for (PokemonStat stat: stats) {
+            if (stat.getName().equals(type.name)) {
+                return stat.getValue();
+            }
+        }
+        return 0;
+    }
+
+    public Integer getPokemonHp() {
+        return getStatValue(StatTypes.HP);
+    }
+
+    public Integer getPokemonAttack() {
+        return getStatValue(StatTypes.ATTACK);
+    }
+
+    public Integer getPokemonDefence() {
+        return getStatValue(StatTypes.DEFENSE);
+    }
 }

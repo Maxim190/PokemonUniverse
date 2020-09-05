@@ -4,13 +4,15 @@ import android.graphics.Bitmap;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.pokemonuniverse.model.pojo.stats.PokemonStat;
 import com.example.pokemonuniverse.utils.BitmapConverter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class Pokemon implements Serializable {
+public class Pokemon implements Serializable, Comparable<Pokemon>{
 
     @SerializedName("name")
     @Expose
@@ -74,6 +76,21 @@ public class Pokemon implements Serializable {
 
     public void setImage(Bitmap image) {
         this.image = BitmapConverter.toByteArray(image);
-        Log.d("YES", this.image.length + " ARRAY");
+    }
+
+    @Override
+    public int compareTo(Pokemon pokemon) {
+        PokemonAdditionalInf current = this.getAdditionalInf();
+        PokemonAdditionalInf other = pokemon.additionalInf;
+
+        int comparison = current.getPokemonAttack() - other.getPokemonAttack();
+        if (comparison != 0) {
+            return comparison;
+        }
+        comparison = current.getPokemonHp() - other.getPokemonHp();
+        if (comparison != 0 ) {
+            return comparison;
+        }
+        return current.getPokemonDefence() - other.getPokemonDefence();
     }
 }

@@ -1,6 +1,5 @@
 package com.example.pokemonuniverse.model.api;
 
-import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
 
 import retrofit2.Call;

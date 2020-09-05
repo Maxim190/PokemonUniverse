@@ -21,28 +21,32 @@
         android:orientation="horizontal">
 
         <CheckBox
+            android:id="@+id/attack_check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="hp"/>
+            android:text="@string/attack"/>
 
         <CheckBox
+            android:id="@+id/hp_check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="attack"/>
+            android:text="@string/hp"/>
 
         <CheckBox
+            android:id="@+id/defence_check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="defense"/>
+            android:text="@string/defence"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Filter"/>
+            android:text="@string/filter"
+            android:onClick="filterButtonClicked"/>
 
     </LinearLayout>
 

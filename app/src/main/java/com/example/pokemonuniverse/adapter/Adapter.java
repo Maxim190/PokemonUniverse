@@ -53,6 +53,10 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
         notifyItemChanged(id - 1);
     }
 
+    public void refreshAll() {
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return storage.getStorageSize();

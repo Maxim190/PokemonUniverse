@@ -5,15 +5,13 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.pokemonuniverse.utils.BitmapConverter;
-import com.example.pokemonuniverse.utils.Consts;
 import com.example.pokemonuniverse.model.api.NetworkService;
 import com.example.pokemonuniverse.model.api.NetworkServiceArrayResponse;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
+import com.example.pokemonuniverse.utils.Consts;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -83,7 +81,10 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
                     @Override
                     public void onResponse(Call<PokemonAdditionalInf> call, Response<PokemonAdditionalInf> response) {
                         pokemon.setAdditionalInf(response.body());
-                        Observable.just(pokemon).subscribeWith(observer);
+                        if (observer != null) {
+                            Log.d("SS", pokemon.getAdditionalInf().getPokemonDefence() + " " + storage.indexOf(pokemon));
+                            Observable.just(pokemon).subscribeWith(observer);
+                        }
                     }
 
                     @Override
