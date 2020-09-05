@@ -110,13 +110,13 @@ public class MainPresenter implements MainPresenterInterface {
             @Override
             public void onComplete() {
                 if (filters != null && !filters.isEmpty()) {
-                    filterPokemonsByStats(filters);
+                    filterPokemonsByStats(filters, false);
                 }
             }
         });
     }
 
-    public void filterPokemonsByStats(List<StatTypes> filters) {
+    public void filterPokemonsByStats(List<StatTypes> filters, Boolean scrollToBeginning) {
         this.filters = filters;
         new Thread(()-> {
             AtomicInteger counter = new AtomicInteger(0);
@@ -132,6 +132,9 @@ public class MainPresenter implements MainPresenterInterface {
                     if ((pokemonStorage.getStorageSize()) == counter.incrementAndGet()) {
                         Collections.sort(pokemonStorage.getPokemonList(), new PokemonStatComparator(filters));
                         view.runOnUi(()-> mainViewAdapter.refreshAll());
+                        if (scrollToBeginning) {
+                            view.scrollListToPosition(0);
+                        }
                     }
                 }
 

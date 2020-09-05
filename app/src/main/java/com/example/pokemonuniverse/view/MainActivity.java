@@ -73,6 +73,10 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
         if (defenceCheckBox.isChecked()) {
             stats.add(StatTypes.DEFENSE);
         }
-        mainPresenter.filterPokemonsByStats(stats);
+        mainPresenter.filterPokemonsByStats(stats, true);
+    }
+
+    public void scrollListToPosition(int position) {
+        runOnUiThread(()-> recyclerView.smoothScrollToPosition(position));
     }
 }
