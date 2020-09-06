@@ -3,7 +3,6 @@ package com.example.pokemonuniverse.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,12 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokemonuniverse.R;
-import com.example.pokemonuniverse.model.pojo.stats.StatTypes;
-import com.example.pokemonuniverse.utils.Consts;
 import com.example.pokemonuniverse.adapter.Adapter;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
+import com.example.pokemonuniverse.model.pojo.stats.StatTypes;
 import com.example.pokemonuniverse.presenter.MainPresenter;
 import com.example.pokemonuniverse.presenter.MainPresenterInterface;
+import com.example.pokemonuniverse.utils.Consts;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
     }
 
     public void scrollListToPosition(int position) {
-        runOnUiThread(()-> recyclerView.smoothScrollToPosition(position));
+        recyclerView.smoothScrollToPosition(position);
     }
 
     @SuppressLint("ResourceType")
@@ -101,15 +100,5 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
             mainPresenter.initializeListWithNewSeed();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void selectItemByPosition(int position, int color) {
-        runOnUiThread(()-> {
-            RecyclerView.ViewHolder view = recyclerView.findViewHolderForLayoutPosition(2);
-            if (view != null) {
-                Log.d("YES", "NOTNULL");
-                view.itemView.setBackgroundColor(color);
-            }
-        });
     }
 }

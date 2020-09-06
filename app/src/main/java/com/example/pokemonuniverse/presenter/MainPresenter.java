@@ -102,7 +102,6 @@ public class MainPresenter implements MainPresenterInterface {
 
             @Override
             public void onNext(@NonNull Pokemon pokemon) {
-                Log.d("DD", "REFRESH " + (pokemonStorage.getPokemonPosition(pokemon)));
                 view.runOnUi(()-> mainViewAdapter.refreshItem(pokemonStorage.getPokemonPosition(pokemon)));
             }
 
@@ -135,11 +134,14 @@ public class MainPresenter implements MainPresenterInterface {
                 public void onNext(@NonNull Pokemon pokemon) {
                     if ((pokemonStorage.getStorageSize()) == counter.incrementAndGet()) {
                         Collections.sort(pokemonStorage.getPokemonList(), new PokemonStatComparator(filters));
-                        view.runOnUi(()-> mainViewAdapter.refreshAll());
-                        if (scrollToBeginning) {
-                            view.scrollListToPosition(0);
-                            view.runOnUi(()-> mainViewAdapter.selectFirstItem(!filters.isEmpty()));
-                        }
+
+                        view.runOnUi(()-> {
+                            mainViewAdapter.refreshAll();
+                            mainViewAdapter.selectFirstItem(!filters.isEmpty());
+                            if (scrollToBeginning) {
+                                view.scrollListToPosition(0);
+                            }
+                        });
                     }
                 }
 
