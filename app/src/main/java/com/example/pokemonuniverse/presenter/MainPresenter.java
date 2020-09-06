@@ -3,7 +3,6 @@ package com.example.pokemonuniverse.presenter;
 import android.util.Log;
 
 import com.example.pokemonuniverse.adapter.Adapter;
-import com.example.pokemonuniverse.adapter.AdapterEvent;
 import com.example.pokemonuniverse.model.PokemonStorage;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;

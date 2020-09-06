@@ -9,8 +9,9 @@ import com.example.pokemonuniverse.model.api.NetworkService;
 import com.example.pokemonuniverse.model.api.NetworkServiceArrayResponse;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
-import com.example.pokemonuniverse.model.pojo.TotalCount;
 import com.example.pokemonuniverse.utils.Consts;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -151,5 +152,19 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
             Log.e(Consts.LOG_ERROR_TAG, e.getMessage());
         }
         return result;
+    }
+
+    public class TotalCount {
+        @SerializedName("count")
+        @Expose
+        private Integer totalCount;
+
+        public TotalCount(Integer value) {
+            totalCount = value;
+        }
+
+        public Integer getTotalCount() {
+            return totalCount;
+        }
     }
 }

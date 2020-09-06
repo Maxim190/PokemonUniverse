@@ -1,7 +1,7 @@
 package com.example.pokemonuniverse.model.api;
 
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
-import com.example.pokemonuniverse.model.pojo.TotalCount;
+import com.example.pokemonuniverse.model.PokemonStorage.TotalCount;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
