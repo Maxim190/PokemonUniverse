@@ -15,6 +15,10 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     private ImageView imageField;
     private TextView nameField;
 
+    public String getName() {
+        return nameField.getText().toString();
+    }
+
     public void bind(Pokemon pokemon) {
         nameField.setText(pokemon.getName());
         imageField.setImageBitmap(pokemon.getImage());

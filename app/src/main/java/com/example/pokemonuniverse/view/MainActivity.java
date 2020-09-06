@@ -3,12 +3,16 @@ package com.example.pokemonuniverse.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +37,9 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
     private CheckBox attackCheckBox;
     private CheckBox hpCheckBox;
     private CheckBox defenceCheckBox;
+    private TextView loadingStatusFiled;
+    private TextView sortingStatusFiled;
+    private Button sortingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +49,26 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
         attackCheckBox = findViewById(R.id.attack_check_box);
         hpCheckBox = findViewById(R.id.hp_check_box);
         defenceCheckBox = findViewById(R.id.defence_check_box);
-
+        loadingStatusFiled = findViewById(R.id.loading_status);
+        sortingStatusFiled = findViewById(R.id.sorting_status);
+        sortingButton = findViewById(R.id.sorting_btn);
         recyclerView = findViewById(R.id.recycler_view);
+
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
         mainPresenter = new MainPresenter(this);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)) {
+                    mainPresenter.loadNewPortionOfData();
+                }
+            }
+        });
     }
 
     public void setAdapter(Adapter adapter) {
@@ -68,7 +87,7 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
         startActivity(intent);
     }
 
-    public void filterButtonClicked(View view) {
+    public void sortingButtonClicked(View view) {
         List<StatTypes> stats = new LinkedList<>();
         if (attackCheckBox.isChecked()) {
             stats.add(StatTypes.ATTACK);
@@ -84,6 +103,19 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
 
     public void scrollListToPosition(int position) {
         recyclerView.smoothScrollToPosition(position);
+    }
+
+    @Override
+    public void setVisibleLoadingMsg(Boolean isVisible) {
+        int visibility = isVisible? View.VISIBLE: View.GONE;
+        loadingStatusFiled.setVisibility(visibility);
+    }
+
+    @Override
+    public void isSortingTime(Boolean isSortingNow) {
+        int visibility = isSortingNow? View.VISIBLE: View.GONE;
+        sortingStatusFiled.setVisibility(visibility);
+        sortingButton.setEnabled(!isSortingNow);
     }
 
     @SuppressLint("ResourceType")

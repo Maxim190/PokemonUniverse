@@ -7,6 +7,8 @@
     <string name="name">Name</string>
     <string name="defense">defense</string>
     <string name="hp">hp</string>
-    <string name="filter">Filter</string>
+    <string name="sort">Sort</string>
     <string name="attack">attack</string>
+    <string name="loading_new_data">Loading new data...</string>
+    <string name="sorting_data">Sorting data...</string>
 </resources>

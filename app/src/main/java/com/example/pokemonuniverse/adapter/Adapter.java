@@ -12,15 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pokemonuniverse.R;
 import com.example.pokemonuniverse.model.PokemonStorage;
 
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.SingleObserver;
 
 
 public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
 
     private PokemonStorage storage;
-    private final Observer<AdapterEvent> eventListener;
-    private Integer lastItemClickedPosition;
+    private final SingleObserver<Integer> itemClickedObserver;
     private Boolean selectFirstItem = false;
 
     @NonNull
@@ -41,22 +39,7 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
             holder.itemView.setBackgroundColor(Color.WHITE);
         }
         holder.bind(storage.getPokemonByPosition(position));
-        holder.itemView.setOnClickListener(view -> {
-            lastItemClickedPosition = position;
-            sendEventToPresenter(AdapterEvent.ITEM_CLICKED, eventListener);
-        });
-        if (position == storage.getStorageSize() - 1) {
-            sendEventToPresenter(AdapterEvent.END_OF_DATA, eventListener);
-        }
-    }
-
-    public Integer getLastClickedItemPosition() {
-        return lastItemClickedPosition;
-    }
-
-    private void sendEventToPresenter(AdapterEvent event, Observer<AdapterEvent> observer) {
-        Observable.just(event)
-                .subscribeWith(observer);
+        holder.itemView.setOnClickListener(view -> itemClickedObserver.onSuccess(position));
     }
 
     public void refreshItem(int position) {
@@ -89,8 +72,8 @@ public class Adapter extends RecyclerView.Adapter<MyViewHolder> {
         refreshAll();
     }
 
-    public Adapter(PokemonStorage storage, Observer<AdapterEvent> eventListener) {
-        this.eventListener = eventListener;
+    public Adapter(PokemonStorage storage, SingleObserver<Integer> itemClickedObserver) {
+        this.itemClickedObserver = itemClickedObserver;
         this.storage = storage;
     }
 }

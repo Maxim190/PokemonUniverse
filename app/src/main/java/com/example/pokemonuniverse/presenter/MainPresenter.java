@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class MainPresenter implements MainPresenterInterface {
@@ -28,39 +29,47 @@ public class MainPresenter implements MainPresenterInterface {
     private MainViewInterface view;
     private Adapter mainViewAdapter;
 
+    private Boolean isSortingNow = false;
+    private Boolean isLoadingDataNow = false;
+
     private List<StatTypes> filters;
 
     public MainPresenter(MainViewInterface view) {
         this.view = view;
         random = new Random();
         pokemonStorage = new PokemonStorage();
-        mainViewAdapter = new Adapter(pokemonStorage, new Observer<AdapterEvent>() {
+        mainViewAdapter = new Adapter(pokemonStorage, itemClickedListener());
+        view.setAdapter(mainViewAdapter);
+        getPortionOfPokemon();
+    }
+
+    private SingleObserver<Integer> itemClickedListener() {
+        return new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onNext(@NonNull AdapterEvent event) {
-                switch (event) {
-                    case END_OF_DATA: getPortionOfPokemon(); break;
-                    case ITEM_CLICKED: loadAndDisplayPokemonAdditionalInfByPosition(
-                            mainViewAdapter.getLastClickedItemPosition());
-                }
+            public void onSuccess(@NonNull Integer itemPosition) {
+                loadAndDisplayPokemonAdditionalInfByPosition(itemPosition);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
 
             }
+        };
+    }
 
-            @Override
-            public void onComplete() {
+    private void setSortingStatus(Boolean value) {
+        isSortingNow = value;
+        view.runOnUi(()-> view.isSortingTime(value));
+    }
 
-            }
-        });
-        view.setAdapter(mainViewAdapter);
-        getPortionOfPokemon();
+    private void setLoadingStatus(Boolean value) {
+        isLoadingDataNow = value;
+        view.runOnUi(()-> view.setVisibleLoadingMsg(value));
     }
 
     private void loadAndDisplayPokemonAdditionalInfByPosition(Integer position) {
@@ -94,6 +103,7 @@ public class MainPresenter implements MainPresenterInterface {
     }
 
     private void getPortionOfPokemon() {
+        setLoadingStatus(true);
         pokemonStorage.loadNextPartOfPokemons(new Observer<Pokemon>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -112,6 +122,7 @@ public class MainPresenter implements MainPresenterInterface {
 
             @Override
             public void onComplete() {
+                setLoadingStatus(false);
                 if (filters != null && !filters.isEmpty()) {
                     filterPokemonsByStats(filters, false);
                 }
@@ -121,6 +132,7 @@ public class MainPresenter implements MainPresenterInterface {
 
     public void filterPokemonsByStats(List<StatTypes> filters, Boolean scrollToBeginning) {
         this.filters = filters;
+        setSortingStatus(true);
         new Thread(()-> {
             AtomicInteger counter = new AtomicInteger(0);
             pokemonStorage.getPokemonList().forEach(pokemon ->
@@ -142,6 +154,7 @@ public class MainPresenter implements MainPresenterInterface {
                                 view.scrollListToPosition(0);
                             }
                         });
+                        setSortingStatus(false);
                     }
                 }
 
@@ -164,6 +177,13 @@ public class MainPresenter implements MainPresenterInterface {
         pokemonStorage = new PokemonStorage(seed);
         getPortionOfPokemon();
         view.runOnUi(()-> mainViewAdapter.setNewStorage(pokemonStorage));
+    }
+
+    @Override
+    public void loadNewPortionOfData() {
+        if (!isLoadingDataNow && !isSortingNow) {
+            getPortionOfPokemon();
+        }
     }
 
     private class PokemonStatComparator implements Comparator<Pokemon> {
