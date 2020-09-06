@@ -9,105 +9,121 @@
 
     <ImageView
         android:id="@+id/image_view_pokemon_activity"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/name_pokemon_activity"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="@+id/image_view_pokemon_activity"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_pokemon_activity"
-        tools:text="Bulbasaur" />
+        app:layout_constraintTop_toBottomOf="@+id/image_view_pokemon_activity">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/name"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_pokemon_activity" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/height_pokemon_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/name_pokemon_activity"
-        app:layout_constraintTop_toBottomOf="@id/name_pokemon_activity"
-        tools:text="123" />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/height"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/height_pokemon_activity" />
+            <TextView
+                android:id="@+id/name_pokemon_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                tools:text="Bulbasaur" />
 
-    <TextView
-        android:id="@+id/weight_pokemon_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/image_view_pokemon_activity"
-        app:layout_constraintTop_toBottomOf="@id/height_pokemon_activity"
-        tools:ignore="MissingConstraints"
-        tools:text="234" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/weight"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/height_pokemon_activity" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/types_pokemon_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="10"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/weight_pokemon_activity"
-        app:layout_constraintTop_toBottomOf="@id/weight_pokemon_activity"
-        tools:text="hghg" />
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/height"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/types"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/weight_pokemon_activity"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/height_pokemon_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                tools:text="123" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/stats_pokemon_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="10"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/types_pokemon_activity"
-        app:layout_constraintTop_toBottomOf="@id/types_pokemon_activity"
-        tools:ignore="MissingConstraints"
-        tools:text="Hjgk" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stats"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/types_pokemon_activity"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/weight"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/weight_pokemon_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                tools:text="234" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/types"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/types_pokemon_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="10"
+                android:textSize="20sp"
+                tools:text="hghg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/stats"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/stats_pokemon_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="10"
+                android:textSize="20sp"
+                tools:text="Hjgk" />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
