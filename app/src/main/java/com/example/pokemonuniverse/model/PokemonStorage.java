@@ -20,6 +20,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +60,7 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
 
                     @Override
                     public void onFailure(Call<TotalCount> call, Throwable t) {
-
+                        Log.e(Consts.LOG_ERROR_TAG, t.getMessage());
                     }
                 });
     }
@@ -84,11 +85,11 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
         if (storage.size() == totalCount.getTotalCount()) {
             return;
         }
-        Integer offset = seed + storage.size();
+        int offset = seed + storage.size();
         if (seed + storage.size() >= totalCount.getTotalCount()) {
             offset = 0;
         }
-        Integer portionSize = PORTION_SIZE;
+        int portionSize = PORTION_SIZE;
         if (storage.size() + portionSize >= totalCount.getTotalCount()) {
             portionSize = totalCount.getTotalCount() - storage.size();
         }
@@ -122,9 +123,9 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
                 });
     }
 
-    public void loadPokemonAdditionalInf(Pokemon pokemon, Observer<Pokemon> observer) {
+    public void loadPokemonAdditionalInf(Pokemon pokemon, SingleObserver<Pokemon> observer) {
         if (pokemon.getAdditionalInf() != null) {
-            Observable.just(pokemon).subscribeWith(observer);
+            observer.onSuccess(pokemon);
             return;
         }
         NetworkService.getInstance()
@@ -134,12 +135,12 @@ public class PokemonStorage extends LiveData<List<Pokemon>> {
                     @Override
                     public void onResponse(Call<PokemonAdditionalInf> call, Response<PokemonAdditionalInf> response) {
                         pokemon.setAdditionalInf(response.body());
-                        Observable.just(pokemon).subscribeWith(observer);
+                        observer.onSuccess(pokemon);
                     }
 
                     @Override
                     public void onFailure(Call<PokemonAdditionalInf> call, Throwable t) {
-
+                        Log.e(Consts.LOG_ERROR_TAG, t.getMessage());
                     }
                 });
     }

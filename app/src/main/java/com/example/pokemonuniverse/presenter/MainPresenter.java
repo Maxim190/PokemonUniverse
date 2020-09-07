@@ -75,25 +75,20 @@ public class MainPresenter implements MainPresenterInterface {
             view.openPokemonActivity(rawPokemon);
         }
         else {
-            pokemonStorage.loadPokemonAdditionalInf(rawPokemon, new Observer<Pokemon>() {
+            pokemonStorage.loadPokemonAdditionalInf(rawPokemon, new SingleObserver<Pokemon>() {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
 
                 }
 
                 @Override
-                public void onNext(@NonNull Pokemon pokemon) {
+                public void onSuccess(@NonNull Pokemon pokemon) {
                     view.openPokemonActivity(pokemon);
                 }
 
                 @Override
                 public void onError(@NonNull Throwable e) {
-                    Log.d(Consts.LOG_DEBUG_TAG, e.getMessage());
-                }
-
-                @Override
-                public void onComplete() {
-
+                    Log.e(Consts.LOG_ERROR_TAG, e.getMessage());
                 }
             });
         }
@@ -129,38 +124,33 @@ public class MainPresenter implements MainPresenterInterface {
         new Thread(()-> {
             AtomicInteger counter = new AtomicInteger(0);
             pokemonStorage.getPokemonList().forEach(pokemon ->
-                    pokemonStorage.loadPokemonAdditionalInf(pokemon, new Observer<Pokemon>() {
-                @Override
-                public void onSubscribe(@NonNull Disposable d) {
+                    pokemonStorage.loadPokemonAdditionalInf(pokemon, new SingleObserver<Pokemon>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
 
-                }
+                        }
 
-                @Override
-                public void onNext(@NonNull Pokemon pokemon) {
-                    if ((pokemonStorage.getStorageSize()) == counter.incrementAndGet()) {
-                        Collections.sort(pokemonStorage.getPokemonList(), new PokemonStatComparator(filters));
+                        @Override
+                        public void onSuccess(@NonNull Pokemon pokemon) {
+                            if ((pokemonStorage.getStorageSize()) == counter.incrementAndGet()) {
+                                Collections.sort(pokemonStorage.getPokemonList(), new PokemonStatComparator(filters));
 
-                        view.runOnUi(()-> {
-                            mainViewAdapter.refreshAll();
-                            mainViewAdapter.selectFirstItem(!filters.isEmpty());
-                            if (scrollToBeginning) {
-                                view.scrollListToPosition(0);
+                                view.runOnUi(()-> {
+                                    mainViewAdapter.refreshAll();
+                                    mainViewAdapter.selectFirstItem(!filters.isEmpty());
+                                    if (scrollToBeginning) {
+                                        view.scrollListToPosition(0);
+                                    }
+                                });
+                                setSortingStatus(false);
                             }
-                        });
-                        setSortingStatus(false);
-                    }
-                }
+                        }
 
-                @Override
-                public void onError(@NonNull Throwable e) {
-                    Log.d(Consts.LOG_DEBUG_TAG, e.getMessage());
-                }
-
-                @Override
-                public void onComplete() {
-
-                }
-            }));
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            Log.e(Consts.LOG_ERROR_TAG, e.getMessage());
+                        }
+                    }));
         }).start();
     }
 
