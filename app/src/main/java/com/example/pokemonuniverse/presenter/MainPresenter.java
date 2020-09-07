@@ -31,15 +31,13 @@ public class MainPresenter implements MainPresenterInterface {
     private Boolean isSortingNow = false;
     private Boolean isLoadingDataNow = false;
 
-    private List<StatTypes> filters;
-
     public MainPresenter(MainViewInterface view) {
         this.view = view;
         random = new Random();
         pokemonStorage = new PokemonStorage();
         mainViewAdapter = new Adapter(pokemonStorage, itemClickedListener());
         view.setAdapter(mainViewAdapter);
-        getPortionOfPokemon();
+        loadNewPortionOfData();
     }
 
     private SingleObserver<Integer> itemClickedListener() {
@@ -122,15 +120,11 @@ public class MainPresenter implements MainPresenterInterface {
             @Override
             public void onComplete() {
                 setLoadingStatus(false);
-                if (filters != null && !filters.isEmpty()) {
-                    filterPokemonsByStats(filters, false);
-                }
             }
         });
     }
 
     public void filterPokemonsByStats(List<StatTypes> filters, Boolean scrollToBeginning) {
-        this.filters = filters;
         setSortingStatus(true);
         new Thread(()-> {
             AtomicInteger counter = new AtomicInteger(0);
@@ -174,13 +168,14 @@ public class MainPresenter implements MainPresenterInterface {
     public void initializeListWithNewSeed() {
         Integer seed = random.nextInt(pokemonStorage.getTotalCount());
         pokemonStorage = new PokemonStorage(seed);
-        getPortionOfPokemon();
+        loadNewPortionOfData();
         view.runOnUi(()-> mainViewAdapter.setNewStorage(pokemonStorage));
     }
 
     @Override
     public void loadNewPortionOfData() {
         if (!isLoadingDataNow && !isSortingNow) {
+            view.runOnUi(()-> view.uncheckSortCheckBoxes());
             getPortionOfPokemon();
         }
     }

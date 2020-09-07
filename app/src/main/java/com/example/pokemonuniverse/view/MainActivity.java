@@ -118,6 +118,13 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
         sortingButton.setEnabled(!isSortingNow);
     }
 
+    @Override
+    public void uncheckSortCheckBoxes() {
+        attackCheckBox.setChecked(false);
+        hpCheckBox.setChecked(false);
+        defenceCheckBox.setChecked(false);
+    }
+
     @SuppressLint("ResourceType")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

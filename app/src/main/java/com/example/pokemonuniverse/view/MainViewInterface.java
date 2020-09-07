@@ -10,4 +10,5 @@ public interface MainViewInterface {
     void scrollListToPosition(int position);
     void setVisibleLoadingMsg(Boolean isVisible);
     void isSortingTime(Boolean isSortingNow);
+    void uncheckSortCheckBoxes();
 }
