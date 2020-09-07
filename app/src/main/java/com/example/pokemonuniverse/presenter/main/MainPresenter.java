@@ -1,4 +1,4 @@
-package com.example.pokemonuniverse.presenter;
+package com.example.pokemonuniverse.presenter.main;
 
 import android.util.Log;
 
@@ -8,7 +8,7 @@ import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.PokemonAdditionalInf;
 import com.example.pokemonuniverse.model.pojo.stats.StatTypes;
 import com.example.pokemonuniverse.utils.Consts;
-import com.example.pokemonuniverse.view.MainViewInterface;
+import com.example.pokemonuniverse.view.main.MainViewInterface;
 
 import java.util.Collections;
 import java.util.Comparator;

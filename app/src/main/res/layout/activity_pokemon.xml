@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.PokemonActivity">
+    tools:context=".view.pokemon.PokemonActivity">
 
     <ImageView
         android:id="@+id/image_view_pokemon_activity"

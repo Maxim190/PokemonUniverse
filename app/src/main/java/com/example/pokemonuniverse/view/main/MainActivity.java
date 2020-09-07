@@ -1,9 +1,8 @@
-package com.example.pokemonuniverse.view;
+package com.example.pokemonuniverse.view.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,9 +21,10 @@ import com.example.pokemonuniverse.R;
 import com.example.pokemonuniverse.adapter.Adapter;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
 import com.example.pokemonuniverse.model.pojo.stats.StatTypes;
-import com.example.pokemonuniverse.presenter.MainPresenter;
-import com.example.pokemonuniverse.presenter.MainPresenterInterface;
+import com.example.pokemonuniverse.presenter.main.MainPresenter;
+import com.example.pokemonuniverse.presenter.main.MainPresenterInterface;
 import com.example.pokemonuniverse.utils.Consts;
+import com.example.pokemonuniverse.view.pokemon.PokemonActivity;
 
 import java.util.LinkedList;
 import java.util.List;

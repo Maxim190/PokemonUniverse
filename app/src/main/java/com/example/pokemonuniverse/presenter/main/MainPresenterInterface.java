@@ -1,4 +1,4 @@
-package com.example.pokemonuniverse.presenter;
+package com.example.pokemonuniverse.presenter.main;
 
 import com.example.pokemonuniverse.model.pojo.stats.StatTypes;
 

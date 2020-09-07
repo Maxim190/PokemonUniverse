@@ -1,4 +1,4 @@
-package com.example.pokemonuniverse.view;
+package com.example.pokemonuniverse.view.pokemon;
 
 import androidx.appcompat.app.AppCompatActivity;
 

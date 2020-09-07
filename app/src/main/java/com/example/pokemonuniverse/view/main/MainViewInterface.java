@@ -1,4 +1,4 @@
-package com.example.pokemonuniverse.view;
+package com.example.pokemonuniverse.view.main;
 
 import com.example.pokemonuniverse.adapter.Adapter;
 import com.example.pokemonuniverse.model.pojo.Pokemon;
