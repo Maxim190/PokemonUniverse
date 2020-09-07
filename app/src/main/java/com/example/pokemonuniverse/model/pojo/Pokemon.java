@@ -1,16 +1,12 @@
 package com.example.pokemonuniverse.model.pojo;
 
 import android.graphics.Bitmap;
-import android.os.Parcelable;
-import android.util.Log;
 
-import com.example.pokemonuniverse.model.pojo.stats.PokemonStat;
 import com.example.pokemonuniverse.utils.BitmapConverter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Pokemon implements Serializable, Comparable<Pokemon>{
 

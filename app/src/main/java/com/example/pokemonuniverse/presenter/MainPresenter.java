@@ -56,7 +56,7 @@ public class MainPresenter implements MainPresenterInterface {
 
             @Override
             public void onError(@NonNull Throwable e) {
-
+                Log.d(Consts.LOG_DEBUG_TAG, e.getMessage());
             }
         };
     }
@@ -90,7 +90,7 @@ public class MainPresenter implements MainPresenterInterface {
 
                 @Override
                 public void onError(@NonNull Throwable e) {
-
+                    Log.d(Consts.LOG_DEBUG_TAG, e.getMessage());
                 }
 
                 @Override
@@ -159,7 +159,7 @@ public class MainPresenter implements MainPresenterInterface {
 
                 @Override
                 public void onError(@NonNull Throwable e) {
-
+                    Log.d(Consts.LOG_DEBUG_TAG, e.getMessage());
                 }
 
                 @Override
