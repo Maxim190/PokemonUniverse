@@ -3,6 +3,7 @@ package com.example.pokemonuniverse.view.main;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
     private TextView loadingStatusFiled;
     private TextView sortingStatusFiled;
     private Button sortingButton;
+    private MenuItem reInitializeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,9 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
         int visibility = isSortingNow? View.VISIBLE: View.GONE;
         sortingStatusFiled.setVisibility(visibility);
         sortingButton.setEnabled(!isSortingNow);
+        if (reInitializeButton != null) {
+            reInitializeButton.setEnabled(!isSortingNow);
+        }
     }
 
     @Override
@@ -136,6 +141,7 @@ public class MainActivity extends AppCompatActivity  implements MainViewInterfac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_button) {
+            reInitializeButton = item;
             mainPresenter.initializeListWithNewSeed();
         }
         return super.onOptionsItemSelected(item);

@@ -160,7 +160,7 @@ public class MainPresenter implements MainPresenterInterface {
 
     @Override
     public void loadNewPortionOfData() {
-        if (!isLoadingDataNow && !isSortingNow) {
+        if (!isSortingNow) {
             view.runOnUi(()-> view.uncheckSortCheckBoxes());
             getPortionOfPokemon();
         }
