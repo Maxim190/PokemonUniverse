@@ -40,6 +40,7 @@ public class MainPresenter implements MainPresenterInterface {
         loadNewPortionOfData();
     }
 
+    //if item clicked then loads pokemon additional information if it has not loaded yet
     private SingleObserver<Integer> itemClickedListener() {
         return new SingleObserver<Integer>() {
             @Override
@@ -49,7 +50,27 @@ public class MainPresenter implements MainPresenterInterface {
 
             @Override
             public void onSuccess(@NonNull Integer itemPosition) {
-                loadAndDisplayPokemonAdditionalInfByPosition(itemPosition);
+                Pokemon rawPokemon = pokemonStorage.getPokemonByPosition(itemPosition);
+                if (rawPokemon.getAdditionalInf() != null) {
+                    view.openPokemonActivity(rawPokemon);
+                    return;
+                }
+                pokemonStorage.loadPokemonAdditionalInf(rawPokemon, new SingleObserver<Pokemon>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Pokemon pokemon) {
+                        view.openPokemonActivity(pokemon);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e(Consts.LOG_ERROR_TAG, e.getMessage());
+                    }
+                });
             }
 
             @Override
@@ -67,31 +88,6 @@ public class MainPresenter implements MainPresenterInterface {
     private void setLoadingStatus(Boolean value) {
         isLoadingDataNow = value;
         view.runOnUi(()-> view.setVisibleLoadingMsg(value));
-    }
-
-    private void loadAndDisplayPokemonAdditionalInfByPosition(Integer position) {
-        Pokemon rawPokemon = pokemonStorage.getPokemonByPosition(position);
-        if (rawPokemon.getAdditionalInf() != null) {
-            view.openPokemonActivity(rawPokemon);
-        }
-        else {
-            pokemonStorage.loadPokemonAdditionalInf(rawPokemon, new SingleObserver<Pokemon>() {
-                @Override
-                public void onSubscribe(@NonNull Disposable d) {
-
-                }
-
-                @Override
-                public void onSuccess(@NonNull Pokemon pokemon) {
-                    view.openPokemonActivity(pokemon);
-                }
-
-                @Override
-                public void onError(@NonNull Throwable e) {
-                    Log.e(Consts.LOG_ERROR_TAG, e.getMessage());
-                }
-            });
-        }
     }
 
     private void getPortionOfPokemon() {
